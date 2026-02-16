@@ -1,6 +1,7 @@
 # PDO
 - produkt je moje BP (Stresstest App)
-    - testuje latenci floodů na meřič výkonu
+    - testuje latenci analyzátoru výkonu při flood útocích
+        - HTTP, Modbus
     - generuje reporty o výsledku
 - cílová skupina
     - ultra specifické
