@@ -7,6 +7,6 @@
     - ultra specifické
     - firma KMB
 - typ dokumentace
-    - koncepty, co co dělá, co je IP, obecně popsat aplikaci
+    - koncepty, co co dělá, obecně popsat aplikaci
     - návod na setup ???
     - návod na používání ???
