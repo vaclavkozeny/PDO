@@ -1,4 +1,4 @@
-# Instalace
+# Setup
 
 Pro bezproblémový běh aplikace je nutné připravit izolované prostředí. Postupujte podle následujících kroků.
 
@@ -7,7 +7,7 @@ Pro bezproblémový běh aplikace je nutné připravit izolované prostředí. P
 * Operační systém: Linux (doporučeno), macOS nebo Windows
 * Přístup k testované síti (cílová IP musí být dostupná)
 
-## Postup
+## Instalace
 
 1. Otevřete terminál ve složce s projektem.
 2. Vytvořte virtuální prostředí příkazem:
@@ -43,7 +43,7 @@ Pokud používáte Debian, Ubuntu nebo jejich deriváty, systém může zakázat
 Některé síťové funkce (zejména skenování pomocí Nmap nebo manipulace s pakety přes Scapy) vyžadují oprávnění správce. V takovém případě spusťte aplikaci jako sudo python app.py (Linux/macOS) nebo terminál otevřete jako Správce (Windows).
 :::
 
-# Spuštění {#start}
+## Spuštění {#start}
 1. Aktivujte virtuální prostředí:
 
 ::: code-group

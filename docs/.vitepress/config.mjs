@@ -16,14 +16,19 @@ export default defineConfig({
       {
         text: 'Úvod',
         items: [
-          { text: 'Koncepty a principy', link: '/koncepty' },
+          { text: 'Princip testování', link: '/koncepty' },
           { text: 'Instalace', link: '/instalace' }
         ]
       },
       {
         text: 'Použití',
         items: [
-          { text: 'Pracovní postupy', link: '/postupy' },
+          { text: 'Testování', link: '/postupy' },
+          { text: 'Analýza dat', link: '/analyza' },
+        ]
+      },{
+        text: 'Architektura',
+        items: [
           { text: 'Reference modulů', link: '/reference' }
         ]
       }
