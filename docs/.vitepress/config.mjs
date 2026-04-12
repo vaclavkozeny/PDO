@@ -1,7 +1,7 @@
 import { defineConfig } from 'vitepress'
 
 export default defineConfig({
-  base: "PDO",
+  base: '/PDO/',
   title: "StressTestApp",
   description: "Dokumentace k bakalářské práci",
   themeConfig: {
