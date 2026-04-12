@@ -3,7 +3,7 @@ name: Deploy VitePress to gh-pages branch
 on:
   # Spustí se automaticky při pushnutí do hlavní větve (změň na master, pokud používáš master)
   push:
-    branches: [main]
+    branches: [master]
 
 permissions:
   # Akce potřebuje právo zápisu, aby mohla vytvořit commit do větve gh-pages
