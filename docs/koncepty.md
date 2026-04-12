@@ -1,4 +1,4 @@
-# Koncept: Principy zátěžového testování
+# Principy zátěžového testování
 
 StressTestApp je terminálová aplikace určená k zátěžovému testování síťových zařízení, konkrétně analyzátorů výkonu. Aplikace simuluje síťové útoky a měří, jak testované zařízení reaguje z hlediska latence a dostupnosti.
 
