@@ -1,0 +1,26 @@
+{
+  "name": "pdo",
+  "version": "1.0.0",
+  "description": "- produkt je moje BP (Stresstest App)     - testuje latenci analyzátoru výkonu při flood útocích         - HTTP, Modbus     - generuje reporty o výsledku - cílová skupina     - ultra specifické     - firma KMB - typ dokumentace     - ???",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vaclavkozeny/PDO.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vaclavkozeny/PDO/issues"
+  },
+  "homepage": "https://github.com/vaclavkozeny/PDO#readme",
+  "devDependencies": {
+    "vitepress": "^1.6.4"
+  }
+}
