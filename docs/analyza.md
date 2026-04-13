@@ -1,48 +1,51 @@
 # Analýza výsledků a dat
 
-Po úspěšném dokončení zátěžového testu (ať už ve Scénářovém, Manuálním nebo Burst režimu) StressTestApp automaticky shromáždí naměřené hodnoty, zpracuje je a vygeneruje sadu výstupních souborů ve složce s výsledky. 
+Po dokončení testu ve Scénářovém, Manuálním nebo Burst režimu aplikace automaticky uloží naměřená data, zpracuje je a vygeneruje výstupní soubory ve složce s výsledky.
 
-Tato kapitola popisuje, jaké soubory aplikace vytváří a jak z nich správně interpretovat výkon vašeho analyzátoru.
+Tato kapitola popisuje, jaké soubory aplikace vytváří a jak z nich vyčíst výkon testovaného analyzátoru.
 
-## 1. Surová data (`.jsonl`)
+## 1. Surová data
 
-Během testování se veškerá telemetrie ukládá průběžně a asynchronně do souborů s příponou `.jsonl` (JSON Lines). 
+Průběžně se ukládají do souborů s příponou `.jsonl` ve formátu JSON Lines.
 
-Tento formát byl zvolen záměrně, protože umožňuje bezpečný zápis obrovského množství dat bez rizika zahlcení paměti (každý řádek představuje jeden platný JSON objekt s výsledkem jednoho konkrétního požadavku).
+Tento formát je vhodný pro velké objemy dat, protože každý řádek představuje samostatný JSON záznam a zápis je možné provádět průběžně bez zbytečného zatěžování paměti.
 
-**Co surová data obsahují:**
-* Časové razítko odeslání požadavku.
-* Dobu odezvy (RTT - Round Trip Time).
-* Stavový kód (např. HTTP 200, 503, nebo specifické chybové kódy Modbus/SNMP).
-* Fázi případného selhání (např. *connection timeout*, *read error*).
-* Skutečný objem přenesených dat.
+### Co surová data obsahují
+
+* časové razítko odeslání požadavku
+* dobu odezvy (RTT) v milisekundách
+* stavový kód, například HTTP 200, 503 nebo specifické chyby Modbus a SNMP
+* fázi případného selhání, například connection timeout nebo read error
+* skutečný objem přenesených dat
 
 ::: tip Proč `.jsonl`?
-Tento formát je ideální pro další strojové zpracování. Můžete jej velmi snadno načíst do analytických knihoven, jako je Pandas nebo Polars v Pythonu, a provádět nad nimi vlastní pokročilou analytiku.
+Formát `.jsonl` se dobře zpracovává v analytických nástrojích. Lze jej snadno načíst například pomocí Pandas nebo Polars a dál s ním pracovat v Pythonu.
 :::
 
-## 2. Tabulka shrnutí (Summary Table)
+## 2. Souhrnná tabulka
 
-Aby nebylo nutné vždy manuálně procházet tisíce řádků surových dat, aplikace po skončení testu automaticky vygeneruje přehlednou shrnující tabulku (např. ve formátu CSV nebo textového reportu).
+Po skončení testu aplikace vytvoří také souhrnný přehled.
 
-**Tabulka typicky poskytuje agregované metriky pro každou fázi testu:**
-* Celkový počet odeslaných požadavků.
-* Počet a procento neúspěšných spojení (chybovost).
-* Průměrnou a maximální latenci (RTT).s
+Souhrnná tabulka obsahuje tyto metriky:
 
-Díky této tabulce na první pohled poznáte, při jaké zátěži (úrovni *concurrency*) začal analyzátor výkonu ztrácet pakety nebo prodlužovat dobu odezvy.
+* celkový počet odeslaných požadavků
+* počet a procento neúspěšných spojení
+* průměrnou a maximální hodnotu RTT
 
-## 3. Vizualizace: Boxplot grafy
+Díky této tabulce lze rychle zjistit, při jaké úrovni zátěže začal analyzátor ztrácet pakety nebo zpomalovat odpovědi.
 
-Nejužitečnějším výstupem pro rychlou analýzu stability zařízení jsou vygenerované grafy, konkrétně **krabicové grafy (Boxplots)**. Tyto grafy jsou rozdělené podle kategorií zatížení (podle počtu paralelních spojení - *concurrency*).
+## 3. Vizualizace: boxploty
 
-**Jak číst boxplot z naší aplikace:**
-* **Osa X (horizontální):** Představuje kategorie zatížení (např. 1, 10, 50, 100 paralelních spojení).
-* **Osa Y (vertikální):** Představuje naměřenou latenci v milisekundách.
-* **Tělo "krabice":** Ukazuje, kde se nachází středních 50 % všech naměřených odezev. Čím je krabice užší, tím stabilněji analyzátor odpovídal.
-* **Čára uprostřed (medián):** Ukazuje typickou dobu odezvy pro danou zátěž.
-* **Tečky (Outliers):** Zobrazují extrémní výkyvy (spiky), kdy zařízení reagovalo nestandardně pomalu.
+Pro rychlé vyhodnocení stability zařízení jsou nejpraktičtějším výstupem boxploty, tedy krabicové grafy. Jsou rozdělené podle úrovně zatížení, tedy podle počtu paralelních spojení.
 
-::: info Identifikace bodu zlomu
-Při prohlížení boxplotů hledejte moment, kdy průměrná latence začne exponenciálně růst, nebo kdy se výrazně zvětší rozptyl grafu (velikost "krabice"). Tento bod značí hardwarový nebo softwarový limit testovaného analyzátoru.
+### Jak boxplot číst
+
+* **Osa X** představuje kategorii zátěže, například 1, 10, 50 nebo 100 paralelních spojení.
+* **Osa Y** ukazuje naměřenou RTT v milisekundách.
+* **Tělo krabice** znázorňuje středních 50 % naměřených hodnot. Čím je krabice užší, tím stabilnější bylo chování zařízení.
+* **Čára uprostřed** představuje medián, tedy typickou dobu odezvy pro danou zátěž.
+* **Body mimo krabici** ukazují odlehlé hodnoty, tedy extrémní výkyvy, kdy zařízení reagovalo výrazně pomaleji.
+
+::: info Jak poznat bod zlomu
+Při vyhodnocení sledujte okamžik, kdy začne latence výrazně růst nebo se značně zvětší rozptyl hodnot. To obvykle znamená, že analyzátor dosáhl svého hardwarového nebo softwarového limitu.
 :::

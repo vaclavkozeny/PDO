@@ -1,53 +1,61 @@
 # Provedení testů
 
-StressTestApp nabízí tři odlišné režimy pro generování zátěže.
+StressTestApp nabízí tři režimy pro generování zátěže.
 
 ## 1. Scénářový režim (Scenario Mode)
 
-Tento režim využijete pro automatizované testování, kdy chcete postupně zvyšovat zátěž a přesně sledovat, při jakém počtu spojení začíná analyzátor reagovat se zvýšenou latencí nebo přestává odpovídat úplně.
+Tento režim se hodí pro automatizované testování, když chcete postupně zvyšovat zátěž a sledovat, při jakém počtu spojení začíná analyzátor reagovat se zvýšenou latencí nebo přestává odpovídat.
 
 **Postup spuštění:**
 1. [Spusťte aplikaci](/instalace.md#start) a do pole **Target IP** zadejte IP adresu testovaného analyzátoru.
-2. (Volitelné) Klikněte na tlačítka **START PING MONITOR** a **START VOLTAGE MONITOR** v horní liště pro spuštění sběru telemetrie.
-3. V hlavním rozhraní se přepněte do záložky **Scenario Mode**.
-4. Do textového pole vložte definici testu. Každý krok scénáře musí být na samostatném řádku ve formátu `DURATION TYPE CONCURRENCY`.
-5. Klikněte na tlačítko **SAVE** pro uložení definovaného scénáře.
+2. Volitelně spusťte v horní liště tlačítka **START PING MONITOR** a **START VOLTAGE MONITOR**.
+3. Přejděte na záložku **Scenario Mode**.
+4. Do textového pole vložte definici testu. Každý krok scénáře musí být na samostatném řádku ve formátu `DURATION TYPE CONCURRENCY [TYPE2 CONCURRENCY2 ...]`. V jednom řádku můžete zadat více protokolů a jejich hodnot.
+5. Klikněte na tlačítko **SAVE**.
 6. Klikněte na tlačítko **START SCENARIO**.
-7. Aplikace nyní automaticky projde všechny kroky. Po dokončení si můžete prohlédnout vygenerovaný report v adresáři aplikace.
+7. Aplikace projde všechny kroky automaticky. Po dokončení si můžete prohlédnout vygenerovaný report v adresáři aplikace.
 
 ::: tip Příklad scénáře
-Hodnota `30 http 100` znamená 30 sekund trvající test přes protokol HTTP se 100 paralelními spojeními. Pro postupné zvyšování zátěže zadejte pod sebe více řádků (např. 10, 50, 100, 200 spojení).
+Příklad scénáře s více řádky a více protokoly v jednom řádku:
+
+```text
+30 http 100
+20 http 50 modbus 10
+10 snmp 5
+```
+
+První řádek znamená 30 sekund testu přes HTTP se 100 paralelními spojeními. Druhý řádek spouští současně HTTP i Modbus zátěž. Třetí řádek přidává krátký SNMP test.
 :::
 
 ---
 
 ## 2. Manuální režim (Manual Mode)
 
-Manuální režim je ideální pro rychlé ověření funkčnosti nebo pro interaktivní testování, kdy chcete zátěž měnit dynamicky a spouštět jednotlivé typy flood útoků nezávisle na sobě.
+Manuální režim je vhodný pro rychlé ověření funkčnosti i pro interaktivní testování, když chcete zátěž měnit dynamicky a spouštět jednotlivé typy testů nezávisle na sobě.
 
 **Postup spuštění:**
 1. [Spusťte aplikaci](/instalace.md#start) a do pole **Target IP** zadejte IP adresu testovaného analyzátoru.
-2. (Volitelné) Spusťte monitory v horní liště.
-3. Přepněte se do záložky **Manual Mode**.
-4. V sekci vybraného protokolu (HTTP, Modbus, nebo SNMP) najděte textové pole pro **Concurrency** (počet paralelních spojení) a zadejte požadovanou hodnotu.
-5. Klikněte na příslušné tlačítko **Start** (např. *Start HTTP* nebo *Start Modbus*) pro zahájení kontinuálního flood útoku.
-6. Zátěž bude generována, dokud u daného protokolu nekliknete na tlačítko **Stop**.
+2. Volitelně spusťte monitory v horní liště.
+3. Přejděte na záložku **Manual Mode**.
+4. V části vybraného protokolu (HTTP, Modbus nebo SNMP) najděte pole **Concurrency** a zadejte požadovanou hodnotu.
+5. Klikněte na příslušné tlačítko **Start**, například *Start HTTP* nebo *Start Modbus*.
+6. Zátěž poběží, dokud u daného protokolu nekliknete na tlačítko **Stop**.
 
 ::: info Kombinace útoků
-V manuálním režimu nejste omezeni pouze na jeden protokol. Můžete spustit například HTTP a Modbus testy současně a simulovat tak komplexní zátěž na síťové rozhraní analyzátoru.
+V manuálním režimu můžete spustit více protokolů současně. Tím nasimulujete komplexní zátěž síťového rozhraní analyzátoru.
 :::
 
 ---
 
 ## 3. Burst režim (Burst Mode)
 
-Tento režim slouží k simulaci náhlých špiček (tzv. spiků) v síťovém provozu. Na rozdíl od předchozích režimů neudržuje plynulou zátěž po určitý čas, ale okamžitě odešle definované množství požadavků v co nejkratším možném čase.
+Tento režim slouží k simulaci náhlých špiček v síťovém provozu. Na rozdíl od předchozích režimů neudržuje plynulou zátěž po určitý čas, ale okamžitě odešle definované množství požadavků v co nejkratším čase.
 
 **Postup spuštění:**
 1. [Spusťte aplikaci](/instalace.md#start) a do pole **Target IP** zadejte IP adresu testovaného analyzátoru.
-2. Spusťte monitory latence a napětí (při burst útocích je obzvlášť důležité sledovat okamžité výpadky).
-3. Přepněte se do záložky **Burst Mode**.
-4. Vyberte cílový protokol (HTTP, Modbus, nebo SNMP).
-5. Do textového pole zadejte celkový počet požadavků (např. 5000), které se mají jednorázově odeslat.
+2. Spusťte monitory latence a napětí. Při burst testech je důležité sledovat okamžité výpadky.
+3. Přejděte na záložku **Burst Mode**.
+4. Vyberte cílový protokol: HTTP, Modbus nebo SNMP.
+5. Do textového pole zadejte celkový počet požadavků, například 5000.
 6. Klikněte na tlačítko **Start Burst**.
 7. Aplikace se pokusí odeslat všechny požadavky okamžitě.

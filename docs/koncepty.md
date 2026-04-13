@@ -1,17 +1,36 @@
 # Principy zátěžového testování
 
-StressTestApp je terminálová aplikace určená k zátěžovému testování síťových zařízení, konkrétně analyzátorů výkonu. Aplikace simuluje síťové útoky a měří, jak testované zařízení reaguje z hlediska latence a dostupnosti.
+StressTestApp je terminálová aplikace pro zátěžové testování síťových zařízení, zejména analyzátorů výkonu. Simuluje vysokou síťovou zátěž a sleduje, jak zařízení reaguje z hlediska latence, chybovosti a dostupnosti.
 
-Aplikace je postavena nad asynchronním TUI frameworkem Textual a využívá návrhový vzor Mixin pro oddělení uživatelského rozhraní od aplikační logiky.
+Aplikace je postavena na asynchronním TUI frameworku Textual a využívá oddělení uživatelského rozhraní od aplikační logiky.
+
+## Hlavní koncept: oddělení UI a logiky
+
+Klíčovým architektonickým konceptem je oddělení prezentační vrstvy (UI) od vrstvy, která provádí samotné testy a sběr dat.
+
+V praxi to znamená, že uživatelské rozhraní pouze přijímá vstup od uživatele a zobrazuje výsledky. Veškerá testovací logika, jako je generování požadavků, řízení souběžnosti a sběr metrik, běží nezávisle v asynchronních úlohách (tzv. workers). Komunikace mezi těmito dvěma vrstvami probíhá pomocí zpráv a událostí (Textual messaging), nikoli přímým voláním funkcí. UI tedy „neví", jak test probíhá – pouze reaguje na výsledky, které mu logická vrstva průběžně posílá.
+
+### Proč je to důležité
+
+* změny v uživatelském rozhraní neovlivní testovací logiku
+* testovací logiku lze snadněji testovat a rozšiřovat
+* aplikace je přehlednější a lépe udržovatelná
+
+### Praktický tok
+
+1. Uživatel v UI spustí akci, například start scénáře.
+2. Řídicí logika vytvoří testovací úlohy pro zvolené protokoly.
+3. Během běhu se průběžně sbírají metriky, například latence a chybové stavy.
+4. Výsledky se ukládají a po dokončení se vygeneruje souhrn a grafy.
 
 ## Podporované protokoly
 
-* **HTTP:** Generování webových požadavků na zařízení. Aplikace nevyužívá běžné knihovny, ale nízkoúrovňovou práci se sockety pro obcházení chyb serverů (např. chybné `Transfer-Encoding`).
-* **Modbus TCP:** Průmyslová komunikace. Simuluje klientská zařízení odesílající náhodné čtecí požadavky na registry.
-* **SNMP:** Síťový management. Generuje zátěž pomocí UDP dotazů na náhodná OID.
+* **HTTP:** Generování webových požadavků na cílové zařízení.
+* **Modbus TCP:** Simulace průmyslové komunikace pomocí čtecích požadavků na registry.
+* **SNMP:** Generování management dotazů přes UDP pro zátěž transportní vrstvy.
 
 ## Režimy testování
 
-1. **Scénářový režim (Scenario):** Spouštění předem definovaných sekvencí útoků, které postupně zvyšují zátěž.
-2. **Manuální režim (Manual):** Nezávislé řízení zátěže pro jednotlivé protokoly s dynamickým nastavením souběžnosti.
-3. **Burst režim (Burst):** Okamžité odeslání definovaného množství požadavků v co nejkratším čase.
+1. **Scénářový režim:** Spouští předem definované kroky, které postupně mění úroveň zátěže.
+2. **Manuální režim:** Umožňuje samostatně řídit zátěž pro jednotlivé protokoly.
+3. **Burst režim:** Odesílá definované množství požadavků jednorázově v co nejkratším čase.

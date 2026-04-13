@@ -1,15 +1,27 @@
-# Setup
+# Zprovoznění
 
-Pro bezproblémový běh aplikace je nutné připravit izolované prostředí. Postupujte podle následujících kroků.
+Pro bezproblémový běh aplikace je ideální připravit izolované prostředí. Pro Linux je to dokonce nutnost.
+
+::: warning UPOZORNĚNÍ PRO LINUX
+Pokud používáte Debian, Ubuntu nebo jejich deriváty, systém může zakázat instalaci balíčků mimo virtuální prostředí s chybou error: externally-managed-environment. Ignorování tohoto varování může poškodit systémové knihovny. Vždy používejte aktivované virtuální prostředí.
+:::
 
 ## Požadavky
 * Python 3.9+
 * Operační systém: Linux (doporučeno), macOS nebo Windows
 * Přístup k testované síti (cílová IP musí být dostupná)
 
-## Instalace
+## Stažení projektu z GitHubu
 
-1. Otevřete terminál ve složce s projektem.
+Pokud projekt nemáte lokálně, nejprve ho naklonujte z GitHubu:
+
+```bash
+git clone https://github.com/vaclavkozeny/KMB_testSuite
+```
+
+## Instalace závislostí
+
+1. Otevřete terminál ve složce s projektem
 2. Vytvořte virtuální prostředí příkazem:
 ```bash
 python3 -m venv venv
@@ -26,25 +38,44 @@ venv\Scripts\activate.bat
 ```
 ```ps [Windows PS]
 venv\Scripts\Activate.ps1
+```
 :::
-
-
-Nainstalujte potřebné závislosti příkazem:
+4. Nainstalujte potřebné závislosti příkazem:
 
 ``` bash
-pip install textual textual-dev aiofiles aiohttp scapy psutil matplotlib polars python-nmap pymodbus pysnmp pandas seaborn pyarrow
+pip install textual textual-dev aiofiles aiohttp pymodbus pysnmp python-nmap psutil matplotlib polars pandas seaborn
 ```
 
-::: warning UPOZORNĚNÍ PRO LINUX
-Pokud používáte Debian, Ubuntu nebo jejich deriváty, systém může zakázat instalaci balíčků mimo virtuální prostředí s chybou error: externally-managed-environment. Ignorování tohoto varování nebo obcházení přes systémový instalátor může poškodit systémové knihovny. Vždy používejte aktivované virtuální prostředí.
-:::
+### K čemu balíčky slouží
 
-::: info POZNÁMKA K PRÁVŮM
-Některé síťové funkce (zejména skenování pomocí Nmap nebo manipulace s pakety přes Scapy) vyžadují oprávnění správce. V takovém případě spusťte aplikaci jako sudo python app.py (Linux/macOS) nebo terminál otevřete jako Správce (Windows).
-:::
+Stručný přehled hlavních instalovaných balíčků:
+
+* `textual` – tvorba textového uživatelského rozhraní aplikace
+* `aiofiles` – asynchronní práce se soubory
+* `aiohttp` – asynchronní HTTP klient/server pro síťovou komunikaci
+* `pymodbus` – komunikace s Modbus zařízeními
+* `pysnmp` – práce se SNMP zařízeními a jejich monitorování
+* `python-nmap` – spouštění a zpracování výstupu nástroje Nmap
+* `matplotlib` – vykreslování grafů a vizualizací
+* `polars` – rychlá práce s tabulkovými daty
+* `pandas` – zpracování a analýza dat v tabulkách
+* `seaborn` – statistické vizualizace nad daty
+
+
+## Ověření instalace
+
+Po instalaci je vhodné zkontrolovat, že jsou balíčky skutečně dostupné:
+
+```bash
+pip list
+```
+
+V seznamu by se měly objevit instalované balíčky jako `textual`, `aiofiles`, `pymodbus` atd.
+
 
 ## Spuštění {#start}
-1. Aktivujte virtuální prostředí:
+1. Otevřete terminál ve složce s projektem
+2. Aktivujte virtuální prostředí:
 
 ::: code-group
 ```bash [Linux / macOS]
@@ -56,8 +87,18 @@ venv\Scripts\activate.bat
 ```ps [Windows PS]
 venv\Scripts\Activate.ps1
 :::
-2. Spusťte aplikaci příkazem:
+
+3. Spusťte aplikaci příkazem:
 ```bash
 python app.py
 ```
+
+## Ukončení virtuálního prostředí
+
+Po dokončení práce můžete virtuální prostředí vypnout příkazem:
+
+```bash
+deactivate
+```
+
 ---
